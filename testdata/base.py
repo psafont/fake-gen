@@ -153,7 +153,6 @@ class DependentCallable(DependentField):
     :param fields: a list of fields that their values should be passed as parameters on each call.
 
     Example,
-    >>> from __future__ import print_function
     >>> import testdata
     >>> def sum_fields(x, y):
     ...     return x + y

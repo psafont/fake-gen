@@ -106,7 +106,6 @@ class ConditionalValueField(DependentField):
     `possible_values` should cover all possible values of `other_field`
 
     For example,
-    >>> from __future__ import print_function
     >>> import testdata
     >>> class Bar(testdata.DictFactory):
     ...     a = testdata.CountingFactory(0)
