@@ -18,9 +18,11 @@ class StatisticalPercentageFactory(Factory):
     2
     >>> f.count('bar')
     2
-    >>> f = [i for i in StatisticalPercentageFactory([(testdata.Constant('foo'), 50), (testdata.Constant('bar'), 20)]).generate(4)]
-    Traceback (most recent call last):
-    InvalidTotalPrecentage: Need a total of a 100 precent. got 70 instead
+    >>> try:
+    ...     f = [i for i in StatisticalPercentageFactory([(testdata.Constant('foo'), 50), (testdata.Constant('bar'), 20)]).generate(4)]
+    ...     raise AssesionError('InvalidTotalPercentage not raised')
+    ... except InvalidTotalPrecentage:
+    ...     pass
     """
     def __init__(self, factories):
         super(StatisticalPercentageFactory, self).__init__()

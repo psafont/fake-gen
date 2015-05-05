@@ -31,9 +31,10 @@ class Sum(Factory):
     :param sum_func: The function that will be used for summing the factories' results.
 
     A simple Example,
+    >>> from __future__ import print_function
     >>> import testdata
     >>> for i in testdata.Sum([testdata.CountingFactory(10, 5), testdata.CountingFactory(1, 1)]).generate(5):
-    ...     print i
+    ...     print(i)
     11
     17
     23
@@ -94,7 +95,7 @@ class RandomLengthListFactory(Factory):
         self._factory.set_element_amount(element_amount * self._max_items)
 
     def __call__(self):
-        return [self._factory.next() for i in xrange(random.randint(self._min_items, self._max_items))]
+        return [next(self._factory) for i in range(random.randint(self._min_items, self._max_items))]
 
 class ConditionalValueField(DependentField):
     """
@@ -105,21 +106,21 @@ class ConditionalValueField(DependentField):
     `possible_values` should cover all possible values of `other_field`
 
     For example,
+    >>> from __future__ import print_function
     >>> import testdata
     >>> class Bar(testdata.DictFactory):
     ...     a = testdata.CountingFactory(0)
     ...     b = ConditionalValueField('a', {0: 'a', 1: 'b', 2: 'c'}, -1)
+    >>> got = []
     >>> for i in Bar().generate(3):
-    ...     print i
-    {'a': 0, 'b': 'a'}
-    {'a': 1, 'b': 'b'}
-    {'a': 2, 'b': 'c'}
+    ...     got.append(i)
+    >>> got == [{'a': 0, 'b': 'a'}, {'a': 1, 'b': 'b'}, {'a': 2, 'b': 'c'}]
+    True
+    >>> got = []
     >>> for i in Bar().generate(4):
-    ...     print i
-    {'a': 0, 'b': 'a'}
-    {'a': 1, 'b': 'b'}
-    {'a': 2, 'b': 'c'}
-    {'a': 3, 'b': -1}
+    ...     got.append(i)
+    >>> got == [{'a': 0, 'b': 'a'}, {'a': 1, 'b': 'b'}, {'a': 2, 'b': 'c'}, {'a': 3, 'b': -1}]
+    True
     """
     def __init__(self, other_field, possible_values, default_value):
         super(ConditionalValueField, self).__init__([other_field])

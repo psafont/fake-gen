@@ -23,7 +23,7 @@ class RandomLengthStringFactory(Factory):
 
     def __call__(self):
         length = random.randint(self._min_chars, self._max_chars)
-        random_string = [random.choice(string.ascii_letters) for i in xrange(length)]
+        random_string = [random.choice(string.ascii_letters) for i in range(length)]
         random_string.insert(0, self._prefix)
         random_string.append(self._suffix)
 
@@ -60,5 +60,5 @@ class HashHexDigestFactory(Factory):
     
     def __call__(self):
         length = random.randint(self._MIN_VALUE_LENGTH, self._MAX_VALUE_LENGTH)
-        random_string = ''.join([random.choice(string.ascii_letters) for i in xrange(length)])
+        random_string = ''.join([random.choice(string.ascii_letters) for i in range(length)])
         return self._hash_class(random_string).hexdigest()

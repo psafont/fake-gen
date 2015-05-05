@@ -18,6 +18,9 @@ class DictFactoryBuilder(type):
         """
         After we create the children factory, we don't need it anymore
         """
+        keys = []
         for key in dct.keys():
             if issubclass(type(dct[key]), Factory):
-                dct.pop(key)
+                keys.append(key)
+        for key in keys:
+            dct.pop(key)

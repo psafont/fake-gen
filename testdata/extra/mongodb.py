@@ -1,6 +1,6 @@
 try:
     import pymongo
-except ImportError, import_err:
+except ImportError as import_err:
     raise ImportError("{}. in order to use the mongodb extra you must install pymongo (pip install pymongo)".format(str(import_err)))
 
 from ..factories.sequences import RandomSelection
