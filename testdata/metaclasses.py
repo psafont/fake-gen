@@ -21,6 +21,7 @@ class DictFactoryBuilder(type):
         keys = []
         for key in dct.keys():
             if issubclass(type(dct[key]), Factory):
+                # avoid change dict in loop
                 keys.append(key)
         for key in keys:
             dct.pop(key)
