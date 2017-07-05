@@ -47,7 +47,7 @@ class ChildrenTree(object):
 
     def update(self, factories_dct):
         dependent_factories = {}
-        for key, value in factories_dct.iteritems():
+        for key, value in factories_dct.items():
             if issubclass(type(value), DependentField):
                 dependent_factories[key] = value
                 continue

@@ -1,6 +1,8 @@
 from copy import deepcopy
+from .compat import implements_iterator
 from .errors import MissingElementAmountValue, FactoryStartedAlready, MissingRequiredFields
 
+@implements_iterator
 class Factory(object):
     """
     The base class of all the factories.
@@ -18,7 +20,7 @@ class Factory(object):
         
         return self
     
-    def next(self):
+    def __next__(self):
         if self.current_index >= self.element_amount:
             raise StopIteration
 
@@ -123,7 +125,7 @@ class ListFactory(Factory):
         self._factory.set_element_amount(element_amount * self._elements_per_list)
 
     def __call__(self):
-        return [self._factory.next() for i in xrange(self._elements_per_list)]
+        return [next(self._factory) for i in range(self._elements_per_list)]
 
 class Callable(Factory):
     """
@@ -158,12 +160,11 @@ class DependentCallable(DependentField):
     ...     x = testdata.CountingFactory(100)
     ...     y = testdata.CountingFactory(1)
     ...     sum = DependentCallable(sum_fields, ['x', 'y'])
+    >>> got = []
     >>> for i in A().generate(4):
-    ...     print i['x'], i['y'], i['sum']
-    100 1 101
-    101 2 103
-    102 3 105
-    103 4 107
+    ...     got.append((i['x'], i['y'], i['sum']))
+    >>> got == [(100, 1, 101), (101, 2, 103), (102, 3, 105), (103, 4, 107)]
+    True
     """
     def __init__(self, callable_obj, fields=[]):
         super(DependentCallable, self).__init__(fields)
@@ -189,11 +190,13 @@ class ClonedField(DependentField):
     >>> [result] = [i for i in Foo().generate(1)]
     >>> result['id'] == result['cloned_id']
     True
-    >>> class Bar(testdata.DictFactory):
-    ...     id = testdata.CountingFactory(0)
-    ...     cloned_id = ClonedField("_id")
-    Traceback (most recent call last):
-    UnmetDependentFields: The fields: set(['cloned_id']) - depend on fields that aren't defined!
+    >>> try:
+    ...     class Bar(testdata.DictFactory):
+    ...         id = testdata.CountingFactory(0)
+    ...         cloned_id = ClonedField("_id")
+    ...     raise AssertionError('not raise UnmetDependentFields')
+    ... except testdata.errors.UnmetDependentFields:
+    ...     pass
     """
     def __init__(self, cloned_field_name):
         super(ClonedField, self).__init__([cloned_field_name])

@@ -8,8 +8,9 @@ class CycleSequenceFactory(Factory):
     all the items.
 
     Example,
+    >>> from __future__ import print_function
     >>> for i in CycleSequenceFactory([1, 2, 3]).generate(9):
-    ...     print i
+    ...     print(i)
     1
     2
     3
@@ -33,12 +34,13 @@ class RandomSelection(Factory):
     Randomly chooses an element for the give sequence.
 
     Example,
+    >>> from __future__ import print_function
     >>> possible_values = set([1, 2, 3])
     >>> while possible_values:
     ...     for i in RandomSelection([1, 2, 3]).generate(100):
     ...         possible_values.discard(i)
-    >>> print possible_values
-    set([])
+    >>> possible_values == set()
+    True
     """
     def __init__(self, sequence):
         super(RandomSelection, self).__init__()

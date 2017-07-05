@@ -34,8 +34,8 @@ class RelativeNumber(DependentField):
     >>> class Foo(testdata.DictFactory):
     ...     a = testdata.CountingFactory(1)
     ...     b = RelativeNumber('a', 1)
-    >>> [i for i in Foo().generate(3)]
-    [{'a': 1, 'b': 2}, {'a': 2, 'b': 3}, {'a': 3, 'b': 4}]
+    >>> [i for i in Foo().generate(3)] == [{'a': 1, 'b': 2}, {'a': 2, 'b': 3}, {'a': 3, 'b': 4}]
+    True
     """
     def __init__(self, other_number_field, delta):
         super(RelativeNumber, self).__init__([other_number_field])
