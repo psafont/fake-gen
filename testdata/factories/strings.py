@@ -57,8 +57,8 @@ class HashHexDigestFactory(Factory):
     def __init__(self, hash_class):
         super(HashHexDigestFactory, self).__init__()
         self._hash_class = hash_class
-    
+
     def __call__(self):
         length = random.randint(self._MIN_VALUE_LENGTH, self._MAX_VALUE_LENGTH)
-        random_string = ''.join([random.choice(string.ascii_letters) for i in range(length)])
-        return self._hash_class(random_string).hexdigest()
+        random_string = u''.join([random.choice(string.ascii_letters) for i in range(length)])
+        return self._hash_class(random_string.encode()).hexdigest()
