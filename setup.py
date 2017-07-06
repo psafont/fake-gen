@@ -44,7 +44,8 @@ setup(
     include_package_data=True,
 
     install_requires = [
-        'faker == 0.7.17'
+        'faker == 0.7.17',
+        'pymongo'
     ],
         extras_require={
         'test': ['pytest'],
