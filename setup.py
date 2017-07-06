@@ -23,16 +23,30 @@ setup(
     description = "A small package that helps generate content to fill databases for tests.",
     url = "http://github.com/arieb/python-testdata",
     license = "MIT",
-    install_requires = [
-        'fake-factory == 0.3.2'
-    ],
-    keywords = "factory testing test unittest mongo data testdata database json elasticsearch",
-    packages = find_packages(),
-    include_package_data=True,
     long_description=fread('README.md'),
     classifiers=[
+        'Development Status :: 3 - Alpha',
         "Intended Audience :: Developers",
         "Topic :: Software Development :: Testing",
         "License :: OSI Approved :: MIT License",
+
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
     ],
+    keywords = "factory testing test unittest mongo data testdata database json elasticsearch",
+
+    packages = find_packages(exclude=['docs', 'tests']),
+    include_package_data=True,
+
+    install_requires = [
+        'faker == 0.7.17'
+    ],
+        extras_require={
+        'test': ['pytest'],
+        },
 )
