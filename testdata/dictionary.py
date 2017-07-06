@@ -1,7 +1,7 @@
 from copy import deepcopy, copy
-from .base import Factory
-from .metaclasses import DictFactoryBuilder
-from .compat import with_metaclass
+from testdata.base import Factory
+from testdata.metaclasses import DictFactoryBuilder
+from testdata.compat import with_metaclass
 
 class DictFactory(with_metaclass(DictFactoryBuilder, Factory)):
     """
@@ -15,7 +15,7 @@ class DictFactory(with_metaclass(DictFactoryBuilder, Factory)):
     >>> import testdata
     >>> class Users(DictFactory):
     ...    id = testdata.CountingFactory(10)
-    ...    age = testdata.RandomInteger(10, 10) 
+    ...    age = testdata.RandomInteger(10, 10)
     ...    gender = testdata.RandomSelection(['male'])
     >>> [result] = [i for i in Users().generate(1)]
     >>> result == {'id': 10, 'age': 10, 'gender': 'male'}
@@ -35,7 +35,7 @@ class DictFactory(with_metaclass(DictFactoryBuilder, Factory)):
     def _iter_child_factories(self):
         child_factories = copy(self._child_factories)
         for generation in child_factories.keys():
-            for key in child_factories[generation].keys(): 
+            for key in child_factories[generation].keys():
                 self._child_factories[generation][key] = iter(child_factories[generation][key])
 
     def _get_oldest_generation(self):
@@ -44,14 +44,14 @@ class DictFactory(with_metaclass(DictFactoryBuilder, Factory)):
     def __call__(self):
         result = {}
         for factory_name, factory in self._child_factories[0].items():
-            result[factory_name] = factory() 
+            result[factory_name] = factory()
 
         # now we call all Factories subclassing the DependentField
         for i in range(1, self._oldest_generation + 1):
             generation_result = {}
             for factory_name, factory in self._child_factories[i].items():
                 factory.update_depending(result)
-                generation_result[factory_name] = factory() 
+                generation_result[factory_name] = factory()
 
             result.update(generation_result)
 
@@ -62,7 +62,7 @@ class DictFactory(with_metaclass(DictFactoryBuilder, Factory)):
         for i in range(self._oldest_generation + 1):
             for child_factory in self._child_factories[i].values():
                 child_factory.increase_index()
-    
+
     def set_element_amount(self, new_element_amount):
         super(DictFactory, self).set_element_amount(new_element_amount)
         for i in range(self._oldest_generation + 1):

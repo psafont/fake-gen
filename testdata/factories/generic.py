@@ -2,8 +2,8 @@ from copy import deepcopy
 import random
 import operator
 
-from ..errors import NoFactoriesProvided
-from ..base import Factory, DependentField
+from testdata.errors import NoFactoriesProvided
+from testdata.base import Factory, DependentField
 
 class Constant(Factory):
     """
@@ -63,7 +63,7 @@ class Sum(Factory):
         super(Sum, self).increase_index()
         for factory in self._factories:
             factory.increase_index()
-    
+
     def set_element_amount(self, new_element_amount):
         super(Sum, self).set_element_amount(new_element_amount)
         for factory in self._factories:
@@ -71,7 +71,7 @@ class Sum(Factory):
 
 class RandomLengthListFactory(Factory):
     """
-    A factory that returns on each iteration a list of of between `min` and `max` items, returned 
+    A factory that returns on each iteration a list of of between `min` and `max` items, returned
     from calls to the given factory.
 
     Example,
@@ -128,5 +128,5 @@ class ConditionalValueField(DependentField):
         self._default_value = default_value
 
     def __call__(self):
-        other_field_value = self.depending_fields[self._other_field] 
+        other_field_value = self.depending_fields[self._other_field]
         return self._possible_values.get(other_field_value, self._default_value)

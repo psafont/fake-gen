@@ -1,7 +1,7 @@
 from collections import defaultdict
 
-from .errors import UnmetDependentFields
-from .base import Factory, DependentField
+from testdata.errors import UnmetDependentFields
+from testdata.base import Factory, DependentField
 
 class ChildrenTree(object):
     def __init__(self):
@@ -41,7 +41,7 @@ class ChildrenTree(object):
 
     def keys(self):
         return self._tree.keys()
-    
+
     def __getitem__(self, key):
         return self._tree.__getitem__(key)
 
@@ -55,7 +55,7 @@ class ChildrenTree(object):
                 self._tree[0][key] = value
 
         self._build_dependency_tree(dependent_factories)
-    
+
     def _build_dependency_tree(self, dependent_factories):
         leftover_factories = set(dependent_factories.keys())
         unplaced_fields = set()
@@ -63,14 +63,14 @@ class ChildrenTree(object):
             unplaced_fields = self._build_tree(leftover_factories, dependent_factories)
             if unplaced_fields == leftover_factories: # means that no placement has happened!
                 raise UnmetDependentFields("The fields: {} - depend on fields that aren't defined!".format(unplaced_fields))
-            leftover_factories = unplaced_fields 
+            leftover_factories = unplaced_fields
 
     def _build_tree(self, leftover_factory_names, all_dependent_factories):
         unplaced_fields = set([])
         for factory_name in leftover_factory_names:
             needed_factories = set(all_dependent_factories[factory_name].depending_field_names) # we need to know which fields are needed
             for generation in sorted(self._tree.keys()): # will give the available generations
-                needed_factories -= set(self._tree[generation].keys()) # the factory names available in this generation 
+                needed_factories -= set(self._tree[generation].keys()) # the factory names available in this generation
                 if not needed_factories:
                     break
             if needed_factories: # if after traversing the generations, we didn't find all the dependencies, we save this for later

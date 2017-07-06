@@ -1,8 +1,8 @@
 import math
 import random
-from ..base import Factory 
-from ..errors import InvalidTotalPrecentage
-from .generic import Constant
+from testdata.base import Factory
+from testdata.errors import InvalidTotalPrecentage
+from testdata.factories.generic import Constant
 
 class StatisticalPercentageFactory(Factory):
     """
@@ -47,7 +47,7 @@ class StatisticalPercentageFactory(Factory):
         if selected_factory[1] == 0:
             self._factories.remove(selected_factory)
         return value
-        
+
 
 class StatisticalValuesFactory(StatisticalPercentageFactory):
     """

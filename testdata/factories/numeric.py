@@ -1,6 +1,6 @@
 import random
 
-from ..base import Factory, DependentField
+from testdata.base import Factory, DependentField
 
 class RandomNumber(Factory):
     """
@@ -41,7 +41,7 @@ class RelativeNumber(DependentField):
         super(RelativeNumber, self).__init__([other_number_field])
         self._other_number_field = other_number_field
         self._delta = delta
-    
+
     def __call__(self):
         super(RelativeNumber, self).__call__()
         return self.depending_fields[self._other_number_field] + self._delta

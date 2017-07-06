@@ -1,6 +1,6 @@
 import random
 
-from ..base import Factory
+from testdata.base import Factory
 
 class CycleSequenceFactory(Factory):
     """
@@ -27,7 +27,7 @@ class CycleSequenceFactory(Factory):
         self._sequence = sequence
 
     def __call__(self):
-        return self._sequence[self.current_index % self._seq_length] 
+        return self._sequence[self.current_index % self._seq_length]
 
 class RandomSelection(Factory):
     """

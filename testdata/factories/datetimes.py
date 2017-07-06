@@ -1,7 +1,7 @@
 import random
 import datetime
-from ..errors import InvalidFieldType
-from ..base import Factory, DependentField
+from testdata.errors import InvalidFieldType
+from testdata.base import Factory, DependentField
 
 class RandomDateFactory(Factory):
     """
@@ -12,7 +12,7 @@ class RandomDateFactory(Factory):
         Constucts the RandomDateFactory.
         :type minimum: datetime.datetime
         :type maximum: datetime.datetime
-        
+
         Example:
         >>> f = list(RandomDateFactory(datetime.datetime(2013, 10, 1, 1, 1, 0, 0), datetime.datetime(2013, 10, 1, 1, 1, 0, 1)).generate(100))
         >>> len(f)
@@ -27,15 +27,15 @@ class RandomDateFactory(Factory):
         False
         """
         super(RandomDateFactory, self).__init__()
-        self._maximum = maximum 
-        self._minimum = minimum 
+        self._maximum = maximum
+        self._minimum = minimum
         delta = maximum - minimum
         self._delta_seconds = delta.total_seconds()
         self._sign = -1 if self._delta_seconds < 0 else 1
         self._delta_seconds *= self._sign
 
     def __call__(self):
-        delta = datetime.timedelta(seconds=(random.random() * self._delta_seconds)) 
+        delta = datetime.timedelta(seconds=(random.random() * self._delta_seconds))
         return self._minimum + (self._sign * delta)
 
 class DateIntervalFactory(Factory):

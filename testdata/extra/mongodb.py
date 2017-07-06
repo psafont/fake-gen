@@ -3,7 +3,7 @@ try:
 except ImportError as import_err:
     raise ImportError("{}. in order to use the mongodb extra you must install pymongo (pip install pymongo)".format(str(import_err)))
 
-from ..factories.sequences import RandomSelection
+from testdata.factories.sequences import RandomSelection
 
 class FieldFromCollection(RandomSelection):
     """

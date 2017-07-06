@@ -1,11 +1,11 @@
-from ..base import Callable
-from ..errors import NoSuchDatatype
+from testdata.base import Callable
+from testdata.errors import NoSuchDatatype
 import faker
 
 class FakeDataFactory(Callable):
 
     _FAKER_FACTORY = faker.Factory.create()
-    
+
     def __init__(self, data_type):
         if not hasattr(self._FAKER_FACTORY, data_type):
             raise NoSuchDatatype(data_type)

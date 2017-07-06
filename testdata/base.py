@@ -1,6 +1,6 @@
 from copy import deepcopy
-from .compat import implements_iterator
-from .errors import MissingElementAmountValue, FactoryStartedAlready, MissingRequiredFields
+from testdata.compat import implements_iterator
+from testdata.errors import MissingElementAmountValue, FactoryStartedAlready, MissingRequiredFields
 
 @implements_iterator
 class Factory(object):
@@ -17,9 +17,9 @@ class Factory(object):
         if not self._element_amount:
             raise MissingElementAmountValue("missing element_amount for {}".format(self.__class__))
         self._has_started = True
-        
+
         return self
-    
+
     def __next__(self):
         if self.current_index >= self.element_amount:
             raise StopIteration
@@ -42,7 +42,7 @@ class Factory(object):
     @property
     def element_amount(self):
         return self._element_amount
-    
+
     def set_element_amount(self, new_element_amount):
         if self._has_started:
             raise FactoryStartedAlready("can't change 'element_amount' if factory has started")
@@ -90,7 +90,7 @@ class DependentField(Factory):
 
     def __call__(self):
         # if we are missing depending fields values
-        self._check_missing_fields(set(self.depending_field_names), set(self._depending_fields.keys())) 
+        self._check_missing_fields(set(self.depending_field_names), set(self._depending_fields.keys()))
 
     @property
     def depending_field_names(self):
@@ -102,7 +102,7 @@ class DependentField(Factory):
 
 class ListFactory(Factory):
     """
-    A factory that returns on each iteration a list of `elements_per_list` items returned 
+    A factory that returns on each iteration a list of `elements_per_list` items returned
     from calls to the given factory.
 
     Example,

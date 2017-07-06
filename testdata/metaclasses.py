@@ -1,5 +1,5 @@
-from .base import Factory
-from .childrentree import ChildrenTree
+from testdata.base import Factory
+from testdata.childrentree import ChildrenTree
 
 class DictFactoryBuilder(type):
     """
