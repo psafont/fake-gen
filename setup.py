@@ -47,7 +47,7 @@ setup(
         'fake-factory == 0.3.2'
     ],
         extras_require={
-            'test': ['pytest'],
+            'test': ['pytest', 'pymongo'],
             'mongo': ['pymongo']
         },
 )
