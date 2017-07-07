@@ -159,7 +159,7 @@ class DependentCallable(DependentField):
     >>> class A(testdata.DictFactory):
     ...     x = testdata.CountingFactory(100)
     ...     y = testdata.CountingFactory(1)
-    ...     sum = DependentCallable(sum_fields, ['x', 'y'])
+    ...     sum = testdata.DependentCallable(sum_fields, ['x', 'y'])
     >>> got = []
     >>> for i in A().generate(4):
     ...     got.append((i['x'], i['y'], i['sum']))
@@ -186,14 +186,14 @@ class ClonedField(DependentField):
     >>> import testdata
     >>> class Foo(testdata.DictFactory):
     ...     id = testdata.CountingFactory(0)
-    ...     cloned_id = ClonedField("id")
+    ...     cloned_id = testdata.ClonedField("id")
     >>> [result] = [i for i in Foo().generate(1)]
     >>> result['id'] == result['cloned_id']
     True
     >>> try:
     ...     class Bar(testdata.DictFactory):
     ...         id = testdata.CountingFactory(0)
-    ...         cloned_id = ClonedField("_id")
+    ...         cloned_id = testdata.ClonedField("_id")
     ...     raise AssertionError('not raise UnmetDependentFields')
     ... except testdata.errors.UnmetDependentFields:
     ...     pass
