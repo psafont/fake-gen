@@ -1,3 +1,4 @@
+sudo: false
 language: python
 cache: pip
 python:
@@ -6,11 +7,5 @@ python:
   - '3.4'
   - '3.5'
   - '3.6'
-# command to install dependencies
-install:
-  - 'pip install -e .'
-  - 'pip install -e .[test]'
-# command to run tests
-script:
-#  - python -m pytest
-  - python -m pytest --doctest-modules testdata/
+install: pip install tox-travis
+script: tox
