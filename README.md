@@ -40,7 +40,7 @@ class Users(testdata.DictFactory):
     firstname = testdata.FakeDataFactory('firstName')
     lastname = testdata.FakeDataFactory('lastName')
     address = testdata.FakeDataFactory('address')
-    age = testdata.RandomInteger(10, 30) 
+    age = testdata.RandomInteger(10, 30)
     gender = testdata.RandomSelection(['female', 'male'])
 
 for user in Users().generate(10): # let say we only want 10 users
@@ -66,7 +66,7 @@ for e in ExampleFactory().generate(100):
 # ...
 ```
 
-Lets say we want to generate something like events data, we want events to have 
+Lets say we want to generate something like events data, we want events to have
 a start time, and an end time that will be 20 minutes in the future.
 In addition, we want the event's start_time will be 12 minutes apart.
 
@@ -88,7 +88,7 @@ for event in EventFactory().generate(100):
 
 We also have factories that allow us to generate different data distributed by different percentage, for example,
 lets say we want to create a 'Job', that will have an assigned user field, a state field and a description field.
-We want the state to be 'pending' in 90% of dictionaries and 'error' in the rest of them. In addition, we want that if the 'state' field is 
+We want the state to be 'pending' in 90% of dictionaries and 'error' in the rest of them. In addition, we want that if the 'state' field is
 'error' the assigned user will be 'support', or else it should be 'admin'.
 
 ```python
@@ -121,7 +121,7 @@ class Users(testdata.DictFactory):
     firstname = testdata.FakeDataFactory('firstName')
     lastname = testdata.FakeDataFactory('lastName')
     address = testdata.FakeDataFactory('address')
-    age = testdata.RandomInteger(10, 30) 
+    age = testdata.RandomInteger(10, 30)
     gender = testdata.RandomSelection(['female', 'male'])
 ```
 But lets override it so the 'firstname' always returns John, and make the age be a random integer between 40 and 60 and add an 'email' field.
@@ -152,9 +152,9 @@ See the Factorie's Docstrings for more examples and doctests.
 |:-------|:-----------|
 | RandomDateFactory | Generates random dates (python's datetime) between 2 dates|
 | DateIntervalFactory | Generates datetime objects starting from `base` while adding  `delta` to it each iteration.
-| RelativeToDatetimeField | Generates datetime object relative to another datetime field, like if you have `start_time` which is a RandomDateFactory field, and want an `end_time` field that is always 15 minutes later.| 
+| RelativeToDatetimeField | Generates datetime object relative to another datetime field, like if you have `start_time` which is a RandomDateFactory field, and want an `end_time` field that is always 15 minutes later.|
 
-And MUCH MUCH more.. 
+And MUCH MUCH more..
 
 ## Todos
 * Add usage documentation for each factory (using doctest maybe?)

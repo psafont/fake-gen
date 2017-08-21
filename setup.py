@@ -6,11 +6,14 @@ from os import path
 # Used for the long_description.  It's nice, because now 1) we have a top level
 # README file and 2) it's easier to type in the README file than to put a raw
 # string in below ...
-def get_contents(filename):
-    here = path.abspath(path.dirname(__file__))
-    with open(path.join(here, filename), encoding='utf-8') as f:
-        contents = f.read()
-    return contents
+HERE = path.abspath(path.dirname(__file__))
+README = 'README.md'
+try:
+    import pypandoc
+    LONG_DESCRIPTION = pypandoc.convert(README, 'rst')
+except (IOError, ImportError):
+    with open(path.join(HERE, README), encoding='utf-8') as f:
+        LONG_DESCRIPTION = f.read()
 
 
 setup(
@@ -25,7 +28,7 @@ setup(
     description = "A small package that helps generate content to fill databases for tests.",
     url = "http://github.com/psafont/python-testdata",
     license = "MIT",
-    long_description = get_contents('README.md'),
+    long_description = LONG_DESCRIPTION,
     classifiers = [
         'Development Status :: 3 - Alpha',
         "Intended Audience :: Developers",
@@ -48,7 +51,8 @@ setup(
         'fake-factory == 0.3.2'
     ],
     setup_requires = [
-        'setuptools_scm'
+        'setuptools_scm',
+        'pypandoc'
     ],
     extras_require = {
         'test': ['pytest', 'pymongo'],
