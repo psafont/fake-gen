@@ -6,26 +6,25 @@ from fake_gen.base import Factory, DependentField
 class RandomDateFactory(Factory):
     """
     Generates a random dates between 2 dates.
+    :type minimum: datetime.datetime
+    :type maximum: datetime.datetime
+
+    Example:
+    >>> start = datetime.datetime(2013, 10, 1, 1, 1, 0, 0)
+    >>> end = datetime.datetime(2013, 10, 1, 1, 1, 0, 1)
+    >>> dates = list(RandomDateFactory(start, end).generate(100))
+    >>> len(dates)
+    100
+    >>> datetime.datetime(2013, 10, 1, 1, 1, 0, 0) in dates
+    True
+    >>> datetime.datetime(2013, 10, 1, 1, 1, 0, 1) in dates
+    True
+    >>> datetime.datetime(2013, 10, 1, 1, 1, 0, 2) in dates
+    False
+    >>> datetime.datetime(2013, 10, 1, 2, 1, 0, 2) in dates
+    False
     """
     def __init__(self, minimum, maximum):
-        """
-        Constucts the RandomDateFactory.
-        :type minimum: datetime.datetime
-        :type maximum: datetime.datetime
-
-        Example:
-        >>> f = list(RandomDateFactory(datetime.datetime(2013, 10, 1, 1, 1, 0, 0), datetime.datetime(2013, 10, 1, 1, 1, 0, 1)).generate(100))
-        >>> len(f)
-        100
-        >>> datetime.datetime(2013, 10, 1, 1, 1, 0, 0) in f
-        True
-        >>> datetime.datetime(2013, 10, 1, 1, 1, 0, 1) in f
-        True
-        >>> datetime.datetime(2013, 10, 1, 1, 1, 0, 2) in f
-        False
-        >>> datetime.datetime(2013, 10, 1, 2, 1, 0, 2) in f
-        False
-        """
         super(RandomDateFactory, self).__init__()
         self._maximum = maximum
         self._minimum = minimum
@@ -45,7 +44,9 @@ class DateIntervalFactory(Factory):
     :type delta: datetime.timedelta
 
     Example:
-    >>> list(DateIntervalFactory(datetime.datetime(2013, 10, 1), datetime.timedelta(days=1)).generate(3))
+    >>> start = datetime.datetime(2013, 10, 1)
+    >>> interval = datetime.timedelta(days=1)
+    >>> list(DateIntervalFactory(start, interval).generate(3))
     [datetime.datetime(2013, 10, 1, 0, 0), datetime.datetime(2013, 10, 2, 0, 0), datetime.datetime(2013, 10, 3, 0, 0)]
     """
     def __init__(self, base, delta):
@@ -67,7 +68,7 @@ class RelativeToDatetimeField(DependentField):
 
     def __call__(self):
         other_field = self.depending_fields[self._datetime_field_name]
-        if type(other_field) != datetime.datetime:
+        if not isinstance(other_field, datetime.datetime):
             raise InvalidFieldType("field {} isn't of type datetime.datetime")
         return other_field + self._delta
 

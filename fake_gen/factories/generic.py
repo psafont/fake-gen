@@ -33,17 +33,26 @@ class Sum(Factory):
     A simple Example,
     >>> from __future__ import print_function
     >>> import fake_gen
-    >>> for i in fake_gen.Sum([fake_gen.CountingFactory(10, 5), fake_gen.CountingFactory(1, 1)]).generate(5):
+    >>> two_factories = [fake_gen.CountingFactory(10, 5), fake_gen.CountingFactory(1, 1)]
+    >>> for i in fake_gen.Sum(two_factories).generate(5):
     ...     print(i)
     11
     17
     23
     29
     35
+    >>> (elem for elem in fake_gen.Sum().generate(1))
+    Traceback (most recent call last):
+        ...
+    fake_gen.errors.NoFactoriesProvided: You must pass at least one factory.
+    >>> (elem for elem in fake_gen.Sum([]).generate(1))
+    Traceback (most recent call last):
+        ...
+    fake_gen.errors.NoFactoriesProvided: You must pass at least one factory.
     """
-    def __init__(self, factories=[], sum_func=operator.add):
+    def __init__(self, factories=None, sum_func=operator.add):
         super(Sum, self).__init__()
-        if len(factories) == 0:
+        if not factories:
             raise NoFactoriesProvided("You must pass at least one factory.")
         self._factories = deepcopy(factories)
         self._sum_func = sum_func
@@ -64,10 +73,10 @@ class Sum(Factory):
         for factory in self._factories:
             factory.increase_index()
 
-    def set_element_amount(self, new_element_amount):
-        super(Sum, self).set_element_amount(new_element_amount)
+    def set_element_amount(self, element_amount):
+        super(Sum, self).set_element_amount(element_amount)
         for factory in self._factories:
-            factory.set_element_amount(new_element_amount)
+            factory.set_element_amount(element_amount)
 
 class RandomLengthListFactory(Factory):
     """
@@ -95,7 +104,8 @@ class RandomLengthListFactory(Factory):
         self._factory.set_element_amount(element_amount * self._max_items)
 
     def __call__(self):
-        return [next(self._factory) for i in range(random.randint(self._min_items, self._max_items))]
+        length = random.randint(self._min_items, self._max_items)
+        return [next(self._factory) for i in range(length)]
 
 class ConditionalValueField(DependentField):
     """

@@ -1,6 +1,6 @@
+import faker
 from fake_gen.base import Callable
 from fake_gen.errors import NoSuchDatatype
-import faker
 
 class FakeDataFactory(Callable):
 

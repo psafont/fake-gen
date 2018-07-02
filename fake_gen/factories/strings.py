@@ -16,9 +16,9 @@ class RandomLengthStringFactory(Factory):
         self._prefix = prefix if prefix else ''
         self._suffix = suffix if suffix else ''
 
-        if type(self._min_chars) != int:
+        if not isinstance(self._min_chars, int):
             raise TypeError("min_chars needs to be an integer")
-        if type(self._max_chars) != int:
+        if not isinstance(self._max_chars, int):
             raise TypeError("max_chars needs to be an integer")
 
     def __call__(self):

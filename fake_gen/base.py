@@ -43,10 +43,10 @@ class Factory(object):
     def element_amount(self):
         return self._element_amount
 
-    def set_element_amount(self, new_element_amount):
+    def set_element_amount(self, element_amount):
         if self._has_started:
             raise FactoryStartedAlready("can't change 'element_amount' if factory has started")
-        self._element_amount = new_element_amount
+        self._element_amount = element_amount
 
     @property
     def precent(self):
@@ -68,29 +68,30 @@ class DependentField(Factory):
 
     See `ClonedField` class for an example usage.
     """
-    def __init__(self, depending_field_names=[]):
+    def __init__(self, depending_field_names=None):
         super(DependentField, self).__init__()
+
+        if depending_field_names is None:
+            depending_field_names = []
+
         self._depending_field_names = depending_field_names
         self._depending_fields = {}
-
-    def _check_missing_fields(self, required_fields, available_fields):
-        missing_fields = set(required_fields) - set(available_fields)
-        if missing_fields:
-            raise MissingRequiredFields(str(missing_fields))
 
     def update_depending(self, new_depending_values):
         """
         updates the depending field values.
         The fields should be updated before each call to the factory.
         """
-        self._check_missing_fields(set(self._depending_field_names), set(new_depending_values.keys()))
+        _check_missing_fields(
+            set(self._depending_field_names), set(new_depending_values.keys()))
 
         for field in self._depending_field_names:
             self._depending_fields[field] = new_depending_values[field]
 
     def __call__(self):
         # if we are missing depending fields values
-        self._check_missing_fields(set(self.depending_field_names), set(self._depending_fields.keys()))
+        _check_missing_fields(
+            set(self.depending_field_names), set(self._depending_fields.keys()))
 
     @property
     def depending_field_names(self):
@@ -137,7 +138,7 @@ class Callable(Factory):
     >>> list(Callable(lambda: 'foo').generate(4))
     ['foo', 'foo', 'foo', 'foo']
     """
-    def __init__(self, callable_obj ):
+    def __init__(self, callable_obj):
         super(Callable, self).__init__()
         self._callable_obj = callable_obj
 
@@ -166,8 +167,12 @@ class DependentCallable(DependentField):
     >>> got == [(100, 1, 101), (101, 2, 103), (102, 3, 105), (103, 4, 107)]
     True
     """
-    def __init__(self, callable_obj, fields=[]):
+    def __init__(self, callable_obj, fields=None):
         super(DependentCallable, self).__init__(fields)
+
+        if fields is None:
+            fields = []
+
         self._callable_obj = callable_obj
         self._fields = fields
 
@@ -205,3 +210,8 @@ class ClonedField(DependentField):
     def __call__(self):
         super(ClonedField, self).__call__()
         return self.depending_fields[self._cloned_field_name]
+
+def _check_missing_fields(required_fields, available_fields):
+    missing_fields = set(required_fields) - set(available_fields)
+    if missing_fields:
+        raise MissingRequiredFields(str(missing_fields))
