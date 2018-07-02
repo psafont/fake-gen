@@ -1,8 +1,8 @@
 import math
 import random
-from testdata.base import Factory
-from testdata.errors import InvalidTotalPrecentage
-from testdata.factories.generic import Constant
+from fake_gen.base import Factory
+from fake_gen.errors import InvalidTotalPrecentage
+from fake_gen.factories.generic import Constant
 
 class StatisticalPercentageFactory(Factory):
     """
@@ -12,14 +12,14 @@ class StatisticalPercentageFactory(Factory):
     Note:
     The sum of all precentages should be 100.
     Examples:
-    >>> import testdata
-    >>> f = [i for i in StatisticalPercentageFactory([(testdata.Constant('foo'), 50), (testdata.Constant('bar'), 50)]).generate(4)]
+    >>> import fake_gen
+    >>> f = [i for i in StatisticalPercentageFactory([(fake_gen.Constant('foo'), 50), (fake_gen.Constant('bar'), 50)]).generate(4)]
     >>> f.count('foo')
     2
     >>> f.count('bar')
     2
     >>> try:
-    ...     f = [i for i in StatisticalPercentageFactory([(testdata.Constant('foo'), 50), (testdata.Constant('bar'), 20)]).generate(4)]
+    ...     f = [i for i in StatisticalPercentageFactory([(fake_gen.Constant('foo'), 50), (fake_gen.Constant('bar'), 20)]).generate(4)]
     ...     raise AssesionError('InvalidTotalPercentage not raised')
     ... except InvalidTotalPrecentage:
     ...     pass

@@ -1,7 +1,7 @@
 import random
 import datetime
-from testdata.errors import InvalidFieldType
-from testdata.base import Factory, DependentField
+from fake_gen.errors import InvalidFieldType
+from fake_gen.base import Factory, DependentField
 
 class RandomDateFactory(Factory):
     """

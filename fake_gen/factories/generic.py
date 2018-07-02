@@ -2,8 +2,8 @@ from copy import deepcopy
 import random
 import operator
 
-from testdata.errors import NoFactoriesProvided
-from testdata.base import Factory, DependentField
+from fake_gen.errors import NoFactoriesProvided
+from fake_gen.base import Factory, DependentField
 
 class Constant(Factory):
     """
@@ -32,8 +32,8 @@ class Sum(Factory):
 
     A simple Example,
     >>> from __future__ import print_function
-    >>> import testdata
-    >>> for i in testdata.Sum([testdata.CountingFactory(10, 5), testdata.CountingFactory(1, 1)]).generate(5):
+    >>> import fake_gen
+    >>> for i in fake_gen.Sum([fake_gen.CountingFactory(10, 5), fake_gen.CountingFactory(1, 1)]).generate(5):
     ...     print(i)
     11
     17
@@ -75,8 +75,8 @@ class RandomLengthListFactory(Factory):
     from calls to the given factory.
 
     Example,
-    >> import testdata
-    >> f = RandomLengthListFactory(testdata.CountingFactory(1), 3, 8).generate(5)
+    >> import fake_gen
+    >> f = RandomLengthListFactory(fake_gen.CountingFactory(1), 3, 8).generate(5)
     >> list(f)
     [[1, 2, 3], [4, 5, 6, 7], [8, 9, 10], [11, 12,13, 14, 15]]
     """
@@ -106,9 +106,9 @@ class ConditionalValueField(DependentField):
     `possible_values` should cover all possible values of `other_field`
 
     For example,
-    >>> import testdata
-    >>> class Bar(testdata.DictFactory):
-    ...     a = testdata.CountingFactory(0)
+    >>> import fake_gen
+    >>> class Bar(fake_gen.DictFactory):
+    ...     a = fake_gen.CountingFactory(0)
     ...     b = ConditionalValueField('a', {0: 'a', 1: 'b', 2: 'c'}, -1)
     >>> got = []
     >>> for i in Bar().generate(3):

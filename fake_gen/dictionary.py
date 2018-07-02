@@ -1,7 +1,7 @@
 from copy import deepcopy, copy
-from testdata.base import Factory
-from testdata.metaclasses import DictFactoryBuilder
-from testdata.compat import with_metaclass
+from fake_gen.base import Factory
+from fake_gen.metaclasses import DictFactoryBuilder
+from fake_gen.compat import with_metaclass
 
 class DictFactory(with_metaclass(DictFactoryBuilder, Factory)):
     """
@@ -12,11 +12,11 @@ class DictFactory(with_metaclass(DictFactoryBuilder, Factory)):
     it contains as keys and values.
 
     Example:
-    >>> import testdata
+    >>> import fake_gen
     >>> class Users(DictFactory):
-    ...    id = testdata.CountingFactory(10)
-    ...    age = testdata.RandomInteger(10, 10)
-    ...    gender = testdata.RandomSelection(['male'])
+    ...    id = fake_gen.CountingFactory(10)
+    ...    age = fake_gen.RandomInteger(10, 10)
+    ...    gender = fake_gen.RandomSelection(['male'])
     >>> [result] = [i for i in Users().generate(1)]
     >>> result == {'id': 10, 'age': 10, 'gender': 'male'}
     True

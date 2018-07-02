@@ -1,6 +1,6 @@
 import random
 import string
-from testdata.base import Factory
+from fake_gen.base import Factory
 
 
 class RandomLengthStringFactory(Factory):

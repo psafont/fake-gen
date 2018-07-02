@@ -1,9 +1,9 @@
-python-testdata
+fake-gen
 ===============
 
 A simple package that generates data for tests.
 
-testdata provides the basic Factory and DictFactory classes that generate content.
+fake_gen provides the basic Factory and DictFactory classes that generate content.
 it also provides many more specialized factories that provide extended functionality.
 every Factory instance knows how many elements its going to generate, this enables us to generate statistical results.
 
@@ -13,15 +13,15 @@ database
 In addition, using the DictFactory and the DependentField factories allows us to create factorys that depend on the results
 of other factories. (see Examples for more information).
 
-testdata isn't bound to a specifc database, but does include database specfic modules inside, like - extra.mongodb.py)
+fake_gen isn't bound to a specifc database, but does include database specfic modules inside, like - extra.mongodb.py)
 but it will always be clean of database related dependencies.
 
 ## Installation
 
-    pip install python-testdata
+    pip install fake-gen
 
 ## Examples
-We integrate the awsome fake-factory package to generate data using FakeDataFactory,
+We integrate the awsome faker package to generate data using FakeDataFactory,
 this allows us to generate all sorts of content like:
     * Names (First, last, full names)
     * companies
@@ -33,15 +33,15 @@ this allows us to generate all sorts of content like:
 lets create a very simple factory that generates Users:
 
 ```python
-import testdata
+import fake_gen
 
-class Users(testdata.DictFactory):
-    id = testdata.CountingFactory(10)
-    firstname = testdata.FakeDataFactory('firstName')
-    lastname = testdata.FakeDataFactory('lastName')
-    address = testdata.FakeDataFactory('address')
-    age = testdata.RandomInteger(10, 30)
-    gender = testdata.RandomSelection(['female', 'male'])
+class Users(fake_gen.DictFactory):
+    id = fake_gen.CountingFactory(10)
+    firstname = fake_gen.FakeDataFactory('firstName')
+    lastname = fake_gen.FakeDataFactory('lastName')
+    address = fake_gen.FakeDataFactory('address')
+    age = fake_gen.RandomInteger(10, 30)
+    gender = fake_gen.RandomSelection(['female', 'male'])
 
 for user in Users().generate(10): # let say we only want 10 users
     print user
@@ -71,13 +71,13 @@ a start time, and an end time that will be 20 minutes in the future.
 In addition, we want the event's start_time will be 12 minutes apart.
 
 ```python
-import testdata
+import fake_gen
 
 EVENT_TYPES = ["USER_DISCONNECT", "USER_CONNECTED", "USER_LOGIN", "USER_LOGOUT"]
-class EventsFactory(testdata.DictFactory):
-    start_time = testdata.DateIntervalFactory(datetime.datetime.now(), datetime.timedelta(minutes=12))
-    end_time = testdata.RelativeToDatetimeField("start_time", datetime.timedelta(minutes=20))
-    event_code = testdata.RandomSelection(EVENT_TYPES)
+class EventsFactory(fake_gen.DictFactory):
+    start_time = fake_gen.DateIntervalFactory(datetime.datetime.now(), datetime.timedelta(minutes=12))
+    end_time = fake_gen.RelativeToDatetimeField("start_time", datetime.timedelta(minutes=20))
+    event_code = fake_gen.RandomSelection(EVENT_TYPES)
 
 for event in EventFactory().generate(100):
     print event
@@ -92,10 +92,10 @@ We want the state to be 'pending' in 90% of dictionaries and 'error' in the rest
 'error' the assigned user will be 'support', or else it should be 'admin'.
 
 ```python
-class Job(testdata.DictFactory):
-    state = testdata.StatisticalValuesFactory([('pending', 90), ('error', 10)])
-    assigned_user = testdata.ConditionalValueField('state', {'error': 'support'}, 'admin')
-    description = testdata.RandomLengthStringFactory()
+class Job(fake_gen.DictFactory):
+    state = fake_gen.StatisticalValuesFactory([('pending', 90), ('error', 10)])
+    assigned_user = fake_gen.ConditionalValueField('state', {'error': 'support'}, 'admin')
+    description = fake_gen.RandomLengthStringFactory()
 
 for i in Job().generate(10):
     print i
@@ -115,19 +115,19 @@ In version 1.0.5 we extended the DictFactory to support passing additional facto
 Lets take for example our 'User' example from the begining.
 
 ```python
-import testdata
-class Users(testdata.DictFactory):
-    id = testdata.CountingFactory(10)
-    firstname = testdata.FakeDataFactory('firstName')
-    lastname = testdata.FakeDataFactory('lastName')
-    address = testdata.FakeDataFactory('address')
-    age = testdata.RandomInteger(10, 30)
-    gender = testdata.RandomSelection(['female', 'male'])
+import fake_gen
+class Users(fake_gen.DictFactory):
+    id = fake_gen.CountingFactory(10)
+    firstname = fake_gen.FakeDataFactory('firstName')
+    lastname = fake_gen.FakeDataFactory('lastName')
+    address = fake_gen.FakeDataFactory('address')
+    age = fake_gen.RandomInteger(10, 30)
+    gender = fake_gen.RandomSelection(['female', 'male'])
 ```
 But lets override it so the 'firstname' always returns John, and make the age be a random integer between 40 and 60 and add an 'email' field.
 
 ```python
-for user in Users(firstname=testdata.Constant('John'), age=testdata.RandomInteger(40, 60), email=testdata.FakeDataFactory('email')).generate(10): # let say we only want 10 users
+for user in Users(firstname=fake_gen.Constant('John'), age=fake_gen.RandomInteger(40, 60), email=fake_gen.FakeDataFactory('email')).generate(10): # let say we only want 10 users
     print user
     #{'firstname': 'John', 'gender': 'male', 'age': 54, 'email': 'hazle.wehner@brekke.com', 'lastname': 'Willms', 'address': '245 Pfeffer Light Apt. 309\nEast Audieside, IN 11931', 'id': 10}
     #{'firstname': 'John', 'gender': 'male', 'age': 47, 'email': 'mariam25@gmail.com', 'lastname': 'Ratke', 'address': '98710 Freddy Gateway\nDelilahborough, GU 50849', 'id': 11}

@@ -1,6 +1,6 @@
 import random
 
-from testdata.base import Factory, DependentField
+from fake_gen.base import Factory, DependentField
 
 class RandomNumber(Factory):
     """
@@ -30,9 +30,9 @@ class RelativeNumber(DependentField):
     Returns a number relative to another number field.
 
     Example:
-    >>> import testdata
-    >>> class Foo(testdata.DictFactory):
-    ...     a = testdata.CountingFactory(1)
+    >>> import fake_gen
+    >>> class Foo(fake_gen.DictFactory):
+    ...     a = fake_gen.CountingFactory(1)
     ...     b = RelativeNumber('a', 1)
     >>> [i for i in Foo().generate(3)] == [{'a': 1, 'b': 2}, {'a': 2, 'b': 3}, {'a': 3, 'b': 4}]
     True

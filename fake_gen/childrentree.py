@@ -1,7 +1,7 @@
 from collections import defaultdict
 
-from testdata.errors import UnmetDependentFields
-from testdata.base import Factory, DependentField
+from fake_gen.errors import UnmetDependentFields
+from fake_gen.base import Factory, DependentField
 
 class ChildrenTree(object):
     def __init__(self):

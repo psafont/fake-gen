@@ -1,6 +1,6 @@
 from copy import deepcopy
-from testdata.compat import implements_iterator
-from testdata.errors import MissingElementAmountValue, FactoryStartedAlready, MissingRequiredFields
+from fake_gen.compat import implements_iterator
+from fake_gen.errors import MissingElementAmountValue, FactoryStartedAlready, MissingRequiredFields
 
 @implements_iterator
 class Factory(object):
@@ -106,8 +106,8 @@ class ListFactory(Factory):
     from calls to the given factory.
 
     Example,
-    >>> import testdata
-    >>> f = ListFactory(testdata.CountingFactory(1), 3).generate(5)
+    >>> import fake_gen
+    >>> f = ListFactory(fake_gen.CountingFactory(1), 3).generate(5)
     >>> list(f)
     [[1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12], [13, 14, 15]]
     """
@@ -153,13 +153,13 @@ class DependentCallable(DependentField):
     :param fields: a list of fields that their values should be passed as parameters on each call.
 
     Example,
-    >>> import testdata
+    >>> import fake_gen
     >>> def sum_fields(x, y):
     ...     return x + y
-    >>> class A(testdata.DictFactory):
-    ...     x = testdata.CountingFactory(100)
-    ...     y = testdata.CountingFactory(1)
-    ...     sum = testdata.DependentCallable(sum_fields, ['x', 'y'])
+    >>> class A(fake_gen.DictFactory):
+    ...     x = fake_gen.CountingFactory(100)
+    ...     y = fake_gen.CountingFactory(1)
+    ...     sum = fake_gen.DependentCallable(sum_fields, ['x', 'y'])
     >>> got = []
     >>> for i in A().generate(4):
     ...     got.append((i['x'], i['y'], i['sum']))
@@ -183,19 +183,19 @@ class ClonedField(DependentField):
     than the cloned field.
 
     Example:
-    >>> import testdata
-    >>> class Foo(testdata.DictFactory):
-    ...     id = testdata.CountingFactory(0)
-    ...     cloned_id = testdata.ClonedField("id")
+    >>> import fake_gen
+    >>> class Foo(fake_gen.DictFactory):
+    ...     id = fake_gen.CountingFactory(0)
+    ...     cloned_id = fake_gen.ClonedField("id")
     >>> [result] = [i for i in Foo().generate(1)]
     >>> result['id'] == result['cloned_id']
     True
     >>> try:
-    ...     class Bar(testdata.DictFactory):
-    ...         id = testdata.CountingFactory(0)
-    ...         cloned_id = testdata.ClonedField("_id")
+    ...     class Bar(fake_gen.DictFactory):
+    ...         id = fake_gen.CountingFactory(0)
+    ...         cloned_id = fake_gen.ClonedField("_id")
     ...     raise AssertionError('not raise UnmetDependentFields')
-    ... except testdata.errors.UnmetDependentFields:
+    ... except fake_gen.errors.UnmetDependentFields:
     ...     pass
     """
     def __init__(self, cloned_field_name):
