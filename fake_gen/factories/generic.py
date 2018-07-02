@@ -41,11 +41,11 @@ class Sum(Factory):
     23
     29
     35
-    >>> (elem for elem in fake_gen.Sum().generate(1))
+    >>> (elem for elem in fake_gen.Sum().generate(1)) # doctest: +IGNORE_EXCEPTION_DETAIL
     Traceback (most recent call last):
         ...
     fake_gen.errors.NoFactoriesProvided: You must pass at least one factory.
-    >>> (elem for elem in fake_gen.Sum([]).generate(1))
+    >>> (elem for elem in fake_gen.Sum([]).generate(1)) # doctest: +IGNORE_EXCEPTION_DETAIL
     Traceback (most recent call last):
         ...
     fake_gen.errors.NoFactoriesProvided: You must pass at least one factory.
