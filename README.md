@@ -1,3 +1,7 @@
+[![tests](https://travis-ci.com/psafont/fake-gen.svg?branch=master)](https://travis-ci.com/psafont/fake-gen)
+[![coverage](https://codecov.io/gh/psafont/fake-gen/branch/master/graph/badge.svg)](https://codecov.io/gh/psafont/fake-gen)
+
+
 fake-gen
 ===============
 
