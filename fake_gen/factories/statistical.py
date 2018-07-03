@@ -16,7 +16,7 @@ class DistributionFactory(Factory):
     Examples,
     >>> import fake_gen
     >>> percentages = [50, 50]
-    >>> ok = zip([fake_gen.Constant('foo'), 'bar'], percentages)
+    >>> ok = list(zip([fake_gen.Constant('foo'), 'bar'], percentages))
     >>> f = [i for i in DistributionFactory(ok).generate(4)]
     >>> f.count('foo')
     2
@@ -32,16 +32,17 @@ class DistributionFactory(Factory):
     def __init__(self, distribution):
         super(DistributionFactory, self).__init__()
 
+        def facto(value):
+            return value if isinstance(value, Factory) else Constant(value)
+        distribution = [(facto(value), probability) for (value, probability) in distribution]
+
         probability = sum(prob for _, prob in distribution)
         if probability != 100:
             raise InvalidDistribution(
                 "A distribution must have a total of a 100% probability. Got {}% instead"
                 .format(probability))
 
-        def facto(value):
-            return value if isinstance(value, Factory) else Constant(value)
-
-        self._distribution = [(facto(value), probability) for (value, probability) in distribution]
+        self._distribution = distribution
 
     def set_element_amount(self, element_amount):
         super(DistributionFactory, self).set_element_amount(element_amount)
@@ -53,9 +54,8 @@ class DistributionFactory(Factory):
     def __call__(self):
         index, chance = random.choice(list(enumerate(self._distribution)))
         factory, amount = chance
-        amount -= 1
-        if amount == 0:
+        if amount == 1:
             self._distribution.remove(chance)
         else:
-            self._distribution[index] = factory, amount
+            self._distribution[index] = factory, amount - 1
         return factory()
