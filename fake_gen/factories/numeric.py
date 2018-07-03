@@ -11,6 +11,9 @@ class RandomNumber(Factory):
         self._minimum = minimum
         self._maximum = maximum
 
+    def __call__(self):
+        raise NotImplementedError()
+
 class RandomInteger(RandomNumber):
     """
     Returns an Integer between `minimum` and `maximum`

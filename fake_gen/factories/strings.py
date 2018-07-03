@@ -22,15 +22,15 @@ class RandomLengthStringFactory(Factory):
     def __init__(self, min_chars=None, max_chars=None, prefix=None, suffix=None):
         super(RandomLengthStringFactory, self).__init__()
 
+        if not isinstance(min_chars, int):
+            raise TypeError("min_chars needs to be an integer")
+        if not isinstance(max_chars, int):
+            raise TypeError("max_chars needs to be an integer")
+
         self._min_chars = min_chars if min_chars else self.MIN_CHAR_DEFAULT
         self._max_chars = max_chars if max_chars else self.MAX_CHAR_DEFAULT
         self._prefix = prefix if prefix else ''
         self._suffix = suffix if suffix else ''
-
-        if not isinstance(self._min_chars, int):
-            raise TypeError("min_chars needs to be an integer")
-        if not isinstance(self._max_chars, int):
-            raise TypeError("max_chars needs to be an integer")
 
     def __call__(self):
         length = random.randint(self._min_chars, self._max_chars)
@@ -50,13 +50,13 @@ class HashHexDigestFactory(Factory):
 
     Examples,
     >> for i in HashHexDigestFactory(hashlib.md5).generate(3):
-    ..      print i
+    ..      print(i)
     aaaa6305d730ca70eae904ca47e427c8
     d172baa4019279f3f78a624f2a0b3e2b
     78cd377dc9421cd4252d8110f9acb7c4
 
     >> for i in HashHexDigestFactory(hashlib.sha224).generate(3):
-    ..      print i
+    ..      print(i)
     8dfd75184b6b5f9be73050dc084a8a3ebcf4c45fc5ca334df911c7c5
     ee1822b3cd7f58eb81bd37b7e5933d73a62578a2c060e7e4808569d0
     3c2ecb8fd519795f77620614ed5b45ccd611a12aa9d355683ac791d9

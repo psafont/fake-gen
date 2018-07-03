@@ -46,8 +46,11 @@ class DateIntervalFactory(Factory):
     Example:
     >>> start = datetime.datetime(2013, 10, 1)
     >>> interval = datetime.timedelta(days=1)
-    >>> list(DateIntervalFactory(start, interval).generate(3))
-    [datetime.datetime(2013, 10, 1, 0, 0), datetime.datetime(2013, 10, 2, 0, 0), datetime.datetime(2013, 10, 3, 0, 0)]
+    >>> datetimes = list(DateIntervalFactory(start, interval).generate(3))
+    >>> len(datetimes)
+    3
+    >>> datetimes
+    [datetime.datetime(2013, 10, 1, 0, 0), ..., datetime.datetime(2013, 10, 3, 0, 0)]
     """
     def __init__(self, base, delta):
         super(DateIntervalFactory, self).__init__()
