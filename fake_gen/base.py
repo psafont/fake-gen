@@ -29,6 +29,9 @@ class Factory(object):
 
         return value
 
+    def next(self):
+        return self.__next__()
+
     def increase_index(self):
         self._current_index += 1
 
@@ -126,7 +129,7 @@ class ListFactory(Factory):
         self._factory.set_element_amount(element_amount * self._elements_per_list)
 
     def __call__(self):
-        return [next(self._factory) for i in range(self._elements_per_list)]
+        return [next(self._factory) for _ in range(self._elements_per_list)]
 
 class Callable(Factory):
     """

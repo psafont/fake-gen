@@ -105,7 +105,7 @@ class RandomLengthListFactory(Factory):
 
     def __call__(self):
         length = random.randint(self._min_items, self._max_items)
-        return [next(self._factory) for i in range(length)]
+        return [next(self._factory) for _ in range(length)]
 
 class ConditionalValueField(DependentField):
     """

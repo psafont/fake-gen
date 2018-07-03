@@ -1,68 +1,61 @@
 import math
 import random
 from fake_gen.base import Factory
-from fake_gen.errors import InvalidTotalPrecentage
+from fake_gen.errors import InvalidDistribution
 from fake_gen.factories.generic import Constant
 
-class StatisticalPercentageFactory(Factory):
+class DistributionFactory(Factory):
     """
-    Returns a different value a precentage of a time.
-    :param factories: a list of 2 item tuples. each tuple contains The Factory that its result should be returned as the first item,
-                                            and the chance of that value returning (in precents) as the second.
+    Returns values from a factory depending on a discrete distribution.
+    :param distribution: an iterator of 2-item tuples. Each tuple must contain
+        a constant or a factory as the first value and a probability in % as
+        the second.
     Note:
-    The sum of all precentages should be 100.
-    Examples:
+    The sum of all percentages should be 100.
+
+    Examples,
     >>> import fake_gen
-    >>> f = [i for i in StatisticalPercentageFactory([(fake_gen.Constant('foo'), 50), (fake_gen.Constant('bar'), 50)]).generate(4)]
+    >>> percentages = [50, 50]
+    >>> ok = zip([fake_gen.Constant('foo'), 'bar'], percentages)
+    >>> f = [i for i in DistributionFactory(ok).generate(4)]
     >>> f.count('foo')
     2
     >>> f.count('bar')
     2
-    >>> try:
-    ...     f = [i for i in StatisticalPercentageFactory([(fake_gen.Constant('foo'), 50), (fake_gen.Constant('bar'), 20)]).generate(4)]
-    ...     raise AssesionError('InvalidTotalPercentage not raised')
-    ... except InvalidTotalPrecentage:
-    ...     pass
+    >>> percentages = [50, 80]
+    >>> wrong = zip(['foo', 'bar'], percentages)
+    >>> f = [i for i in DistributionFactory(wrong).generate(4)] # doctest: +IGNORE_EXCEPTION_DETAIL
+    Traceback (most recent call last):
+     ...
+    InvalidDistribution: Need a total of a 100% probability. Got 70% instead
     """
-    def __init__(self, factories):
-        super(StatisticalPercentageFactory, self).__init__()
-        self._factories = []
-        total_precentage = 0
-        for factory, precent in factories:
-            total_precentage += precent
-            self._factories.append([factory, precent])
-        if total_precentage != 100:
-            raise InvalidTotalPrecentage("Need a total of a 100 precent. got {} instead".format(total_precentage))
+    def __init__(self, distribution):
+        super(DistributionFactory, self).__init__()
+
+        probability = sum(prob for _, prob in distribution)
+        if probability != 100:
+            raise InvalidDistribution(
+                "A distribution must have a total of a 100% probability. Got {}% instead"
+                .format(probability))
+
+        def facto(value):
+            return value if isinstance(value, Factory) else Constant(value)
+
+        self._distribution = [(facto(value), probability) for (value, probability) in distribution]
 
     def set_element_amount(self, element_amount):
-        super(StatisticalPercentageFactory, self).set_element_amount(element_amount)
-        for i in self._factories:
-            i[1] = int(math.ceil(element_amount * (i[1] / 100.0)))
-            i[0].set_element_amount(i[1])
+        super(DistributionFactory, self).set_element_amount(element_amount)
+        for index, (factory, probability) in enumerate(self._distribution):
+            amount = int(math.ceil(element_amount * (probability / 100.0)))
+            factory.set_element_amount(amount)
+            self._distribution[index] = factory, amount
 
     def __call__(self):
-        selected_factory = random.choice(self._factories)
-        value = selected_factory[0]()
-        selected_factory[1] -= 1
-        if selected_factory[1] == 0:
-            self._factories.remove(selected_factory)
-        return value
-
-
-class StatisticalValuesFactory(StatisticalPercentageFactory):
-    """
-    Returns a different value a precentage of a time.
-    :param values: a list of 2 item tuples. each tuple contains the value that should be returned as the first item,
-                                            and the chance of that value returning (in precents) as the second.
-    Note:
-    The sum of all precentages should be 100.
-    Examples:
-    >>> f = [i for i in StatisticalValuesFactory([('foo', 50), ('bar', 50)]).generate(4)]
-    >>> f.count('foo')
-    2
-    >>> f.count('bar')
-    2
-    """
-    def __init__(self, values):
-        factories = [[Constant(value), precent] for value, precent in values]
-        super(StatisticalValuesFactory, self).__init__(factories)
+        index, chance = random.choice(list(enumerate(self._distribution)))
+        factory, amount = chance
+        amount -= 1
+        if amount == 0:
+            self._distribution.remove(chance)
+        else:
+            self._distribution[index] = factory, amount
+        return factory()

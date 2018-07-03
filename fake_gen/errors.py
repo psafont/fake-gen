@@ -14,5 +14,5 @@ class UnmetDependentFields(TestDataError):
     pass
 class NoFactoriesProvided(TestDataError):
     pass
-class InvalidTotalPrecentage(TestDataError):
+class InvalidDistribution(TestDataError):
     pass

@@ -4,7 +4,18 @@ from fake_gen.base import Factory
 
 
 class RandomLengthStringFactory(Factory):
+    """
+    Generates random strings between 2 lengths
 
+    :param min_chars: minimum amount of characters
+    :param max_chars: maximum amount of characters
+    :param prefix: string that must be present before the random characters
+    :param suffix: string that must be present after the random characters
+
+    Examples,
+    >>> all(len(chars) == 5 for chars in RandomLengthStringFactory(5, 5).generate(200))
+    True
+    """
     MIN_CHAR_DEFAULT = 3
     MAX_CHAR_DEFAULT = 100
 
@@ -23,11 +34,11 @@ class RandomLengthStringFactory(Factory):
 
     def __call__(self):
         length = random.randint(self._min_chars, self._max_chars)
-        random_string = [random.choice(string.ascii_letters) for i in range(length)]
-        random_string.insert(0, self._prefix)
-        random_string.append(self._suffix)
+        random_parts = [self._prefix]
+        random_parts += [random.choice(string.ascii_letters) for _ in range(length)]
+        random_parts += [self._suffix]
 
-        return ''.join(random_string)
+        return ''.join(random_parts)
 
 class HashHexDigestFactory(Factory):
     """
@@ -60,5 +71,5 @@ class HashHexDigestFactory(Factory):
 
     def __call__(self):
         length = random.randint(self._MIN_VALUE_LENGTH, self._MAX_VALUE_LENGTH)
-        random_string = u''.join([random.choice(string.ascii_letters) for i in range(length)])
+        random_string = u''.join([random.choice(string.ascii_letters) for _ in range(length)])
         return self._hash_class(random_string.encode()).hexdigest()
